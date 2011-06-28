@@ -1,0 +1,27 @@
+{
+	"name" : "redis-keyspace",
+	"description" : "redis namespacing for node",
+	"keywords" : ["redis", "key-value stores", "namespacing"],
+	"version" : "0.2.0",
+	"contributors": [
+		{
+			"name": "Louis-Philippe Perron",
+			"web": "http://github.com/lp"
+		}
+	],
+	"author" : "Louis-Philippe Perron <lp@spiralix.org> (http://github.com/lp/redis-keyspace)",
+	"bugs" : {
+		"web" : "http://github.com/lp/redis-keyspace/issues"
+	},
+	"main" : "./index.coffee",
+	"directories" : {
+		"lib" : "./lib"
+	},
+	"repository" : {
+		"type" : "git",
+		"url" : "git://github.com/lp/redis-keyspace.git"
+	},
+	"engines" : { "node" : ">=0.4.0"},
+	"dependencies" : {"node-redis": "0.1.3", "coffee-script": "1.0.0"},
+	"licenses" : ["MIT"]
+}
