@@ -135,6 +135,8 @@ COMMANDS =
 
 class RedisKeyspace
   constructor: (@prefix, @redis) ->
+    if not @redis?
+      @redis = require("redis").createClient()
     generate_key = (key) -> prefix + ":" + key
     create_method = (name, key_pos) ->
       (args...) ->
