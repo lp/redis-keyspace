@@ -1,5 +1,5 @@
-# node-redis-namespace
-Similar in use to [redis-namespace](https://github.com/defunkt/redis-namespace) for node.
+# redis-keyspace
+Similar in use to Ruby's [redis-namespace](https://github.com/defunkt/redis-namespace) for node.
 
 # Install
 	npm install redis-keyspace
