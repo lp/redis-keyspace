@@ -3,11 +3,12 @@ h1. redis-keyspace
 h3. Similar in use to Ruby's [redis-namespace](https://github.com/defunkt/redis-namespace) for node.
 
 h2. Install
-	npm install redis-keyspace
-	or
-	npm install redis redis-keyspace  # will also install the redis adapter
-	or
-	npm install hiredis redis redis-keyspace  # will also install the high performance redis C adapter
+	
+bc. npm install redis-keyspace
+or
+npm install redis redis-keyspace  # will also install the redis adapter
+or
+npm install hiredis redis redis-keyspace  # will also install the high performance redis C adapter
 
 h2. Use
 
