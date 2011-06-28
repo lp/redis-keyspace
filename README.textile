@@ -1,6 +1,6 @@
 h1. redis-keyspace
 
-h3. Similar in use to Ruby's [redis-namespace](https://github.com/defunkt/redis-namespace) for node.
+h3. Similar in use to Ruby's "redis-namespace":https://github.com/defunkt/redis-namespace for node.
 
 h2. Install
 	
@@ -12,7 +12,7 @@ npm install hiredis redis redis-keyspace  # will also install the high performan
 
 h2. Use
 
-p. Use this library just as you would [node_redis](https://github.com/mranney/node_redis)
+p. Use this library just as you would "node_redis":https://github.com/mranney/node_redis
     
 bc. redis = require("redis")
 redis_client = redis.createClient()
@@ -24,4 +24,4 @@ client.get('KOO', (err, reply) -> console.log( 'get reply: ' + reply + " err: " 
 
 h2. Thanks
 
-p. This is a CoffeeScript spinoff of ['node-redis-namespace'](https://github.com/arschles/node-redis-namespace) from ['Aaron Schlesinger'](https://github.com/arschles).
+p. This is a CoffeeScript spinoff of "node-redis-namespace":https://github.com/arschles/node-redis-namespace from "Aaron Schlesinger":https://github.com/arschles.
