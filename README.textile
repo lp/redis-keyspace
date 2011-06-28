@@ -22,6 +22,6 @@ client = redis_keyspace.createClient('your_keyspace', redis_client)
 bc. client.set('KOO', 'DOO', (err, reply) -> console.log( 'set reply: ' + reply + " err: " + err ))
 client.get('KOO', (err, reply) -> console.log( 'get reply: ' + reply + " err: " + err ))
 
-h2. Thanks
+h3. Thanks
 
 p. This is a CoffeeScript spinoff of "node-redis-namespace":https://github.com/arschles/node-redis-namespace from "Aaron Schlesinger":https://github.com/arschles.
