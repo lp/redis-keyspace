@@ -17,13 +17,28 @@ client = redis_keyspace.createClient('your_keyspace')
 client.set('KOO', 'DOO', (err, reply) -> console.log( 'set reply: ' + reply + " err: " + err ))
 client.get('KOO', (err, reply) -> console.log( 'get reply: ' + reply + " err: " + err ))
 
-p. Or initialize multiple keyspaces from same client
+p. Or with multiple keyspaces from same client
 
 bc. redis = require("redis")
 redis_client = redis.createClient( 6379, '127.0.0.1')
 redis_keyspace = require('redis-keyspace')
-keyspace_A = redis_keyspace.createClient( 'keyspace_A', redis_client)
-keyspace_B = redis_keyspace.createClient( 'keyspace_B', redis_client)
+keyspace_A = redis_keyspace.createKeyspace( 'keyspace_A', redis_client)
+keyspace_B = redis_keyspace.createKeyspace( 'keyspace_B', redis_client)
+
+h3. Initialization
+
+p. With defaults: 
+
+bc. client = redis_keyspace.createClient('your_keyspace')
+or
+client = redis_keyspace.createKeyspace('your_keyspace')
+
+p. With options:
+
+bc. client = redis_keyspace.createClient('your_keyspace', 6380, '192.168.168.100')
+or
+client = redis_keyspace.createKeyspace('your_keyspace', redis.createClient( 6380, '192.168.168.100'))
+
 
 h3. Thanks
 
