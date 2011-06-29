@@ -161,25 +161,25 @@ COMMANDS =
 
 class RedisKeyspace
   constructor: (@prefix, @redis) ->
+    @reply_parser = @redis.reply_parser
     generate_key = (key) -> prefix + ":" + key
-    create_method = (name, key_pos) ->
-      (args...) ->
-        func = args.pop()
-        if key_pos is FIRST_KEY
-          args[0] = generate_key(args[0])
-        else if key_pos is LAST_KEY
-          args[args.length - 1] == generate_key(args[args.length - 1])
-        else if key_pos is ALL_KEYS or key_pos is NOT_FIRST_KEY or key_pos is NOT_LAST_KEY
-          loop_start = 0
-          loop_end = args.length
-          if key_pos is NOT_FIRST_KEY
-            loop_start++
-          else if key_pos is NOT_LAST_KEY
-            loop_end--
-          i = loop_start
-          while i < loop_end
-            args[i] = generate_key(args[i])
-            i++
-        @redis.send_command name, args, func
-    for k, v of COMMANDS
-      RedisKeyspace::[k] = create_method( k, v)
+    for name, key_pos of COMMANDS
+      do (name, key_pos) ->
+        RedisKeyspace::[name] = (args...) ->
+          func = args.pop()
+          if key_pos is FIRST_KEY
+            args[0] = generate_key(args[0])
+          else if key_pos is LAST_KEY
+            args[args.length - 1] == generate_key(args[args.length - 1])
+          else if key_pos is ALL_KEYS or key_pos is NOT_FIRST_KEY or key_pos is NOT_LAST_KEY
+            loop_start = 0
+            loop_end = args.length
+            if key_pos is NOT_FIRST_KEY
+              loop_start++
+            else if key_pos is NOT_LAST_KEY
+              loop_end--
+            i = loop_start
+            while i < loop_end
+              args[i] = generate_key(args[i])
+              i++
+          @redis.send_command name, args, func
