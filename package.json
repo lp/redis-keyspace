@@ -2,7 +2,7 @@
 	"name" : "redis-keyspace",
 	"description" : "redis namespacing for node",
 	"keywords" : ["redis", "key-value stores", "namespacing"],
-	"version" : "0.3.1",
+	"version" : "0.3.2",
 	"contributors": [
 		{
 			"name": "Louis-Philippe Perron",
@@ -14,6 +14,13 @@
 		"web" : "http://github.com/lp/redis-keyspace/issues"
 	},
 	"main" : "./index.coffee",
+	"scripts": {
+      "test": "node ./test.js"
+  },
+  "devDependencies": {
+    "coffee-script": "1.x.x",
+    "redis": ">=0.6.0"
+  },
 	"directories" : {
 		"lib" : "./lib"
 	},
