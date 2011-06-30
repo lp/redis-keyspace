@@ -18,13 +18,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+_ = require('underscore')
+
 exports.createClient = (prefix, port=6379, host='127.0.0.1') ->
-  new RedisKeyspace(prefix, require("redis").createClient(port,host))
+  if _(port).isNumber() and _(host).isString()
+    new RedisKeyspace(prefix, require("redis").createClient(port,host))
   
 exports.createKeyspace = (prefix, redis) ->
   if not redis?
     redis = require("redis").createClient()
-  new RedisKeyspace(prefix, redis)
+  if redis instanceof Object
+    new RedisKeyspace(prefix, redis)
 
 NO_KEY = -1
 FIRST_KEY = 0
