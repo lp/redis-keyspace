@@ -161,7 +161,9 @@ COMMANDS =
 
 class RedisKeyspace
   constructor: (@prefix, @redis) ->
+    RedisKeyspace::on = @redis.on
     @reply_parser = @redis.reply_parser
+    
     generate_key = (key) -> prefix + ":" + key
     for name, key_pos of COMMANDS
       do (name, key_pos) ->
