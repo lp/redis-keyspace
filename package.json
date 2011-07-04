@@ -2,7 +2,7 @@
 	"name" : "redis-keyspace",
 	"description" : "redis namespacing for node",
 	"keywords" : ["redis", "key-value stores", "namespacing"],
-	"version" : "0.3.2",
+	"version" : "0.4.0",
 	"contributors": [
 		{
 			"name": "Louis-Philippe Perron",
@@ -15,11 +15,16 @@
 	},
 	"main" : "./index.coffee",
 	"scripts": {
+      "test_other": "jasmine-node --verbose --color --coffee ./spec",
       "test": "node ./test.js"
+  },
+  "dependencies": {
+    "underscore": "*"
   },
   "devDependencies": {
     "coffee-script": "1.x.x",
-    "redis": ">=0.6.0"
+    "redis": ">=0.6.0",
+    "jasmine-node": "*"
   },
 	"directories" : {
 		"lib" : "./lib"
