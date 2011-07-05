@@ -189,7 +189,7 @@ class MultiKeyspace extends Multi
     super callback
 
 class RedisKeyspace extends RedisClient
-  constructor: (@port, @host, options) ->
+  constructor: (@port, @host, @options) ->
     for name, key_pos of COMMANDS
       do (name, key_pos) ->
         cmd_func = (args...) ->
@@ -199,7 +199,7 @@ class RedisKeyspace extends RedisClient
           if name is 'hmset'
             args = parse_hmset_args(args)
             
-          args = prefix_args(args, key_pos, options['prefix'])
+          args = prefix_args(args, key_pos, @options['prefix'])
           if func?
             @send_command name, args..., func
           else
@@ -207,7 +207,7 @@ class RedisKeyspace extends RedisClient
         RedisKeyspace::[name] = cmd_func
         RedisKeyspace::[name.toUpperCase()] = cmd_func
     net_client = net.createConnection(port, host)
-    super(net_client, options)
+    super(net_client, @options)
   
   multi: (args) -> new MultiKeyspace(this, args)
   MULTI: (args) -> new MultiKeyspace(this, args)
