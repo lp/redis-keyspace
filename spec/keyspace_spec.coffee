@@ -185,6 +185,25 @@ describe 'redis-keyspace prefix for keys', () ->
     runBlock 'close other db client', (done) ->
       @client3.quit()
       done()
+  it 'should get object in keyspace', () ->
+    runBlock 'object refcount key', (done) ->
+      client.object('REFCOUNT', 'someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'object encoding key', (done) ->
+      client.object('ENCODING', 'someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('raw')
+        done()
+      )
+    runBlock 'object idletime key', (done) ->
+      client.object('IDLETIME', 'someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
   
 describe 'redis-keyspace prefix for strings', () ->
   client = null
