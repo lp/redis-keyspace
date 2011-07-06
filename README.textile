@@ -27,7 +27,6 @@ h3. Incompatible Commands
 
 p. These commands are excluded from keyspace mangling:
 
-* KEYS
 * RANDOMKEY
 
 h3. Thanks
