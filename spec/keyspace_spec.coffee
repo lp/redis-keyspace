@@ -134,7 +134,35 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toBeGreaterThan(1000000000000)
         done()
       )
-    
+  it 'should move keys between db', () ->
+    client3 = getClientWithPrefix keyspace_name
+    client3.select(14, testError)
+    runBlock 'move key', (done) ->
+      client.move('someKey', 14, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'exists moved key', (done) ->
+      client3.exists('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'do not exists moved key', (done) ->
+      client.exists('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'del other db key', (done) ->
+      client3.del('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    client3.quit()
+  
 describe 'redis-keyspace prefix for strings', () ->
   client = null
   client2 = null
