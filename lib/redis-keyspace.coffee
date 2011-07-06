@@ -85,6 +85,7 @@ COMMANDS =
   move: FIRST_KEY
   mset: ODDS_KEY
   msetnx: ODDS_KEY
+  object: LAST_KEY
   persist: FIRST_KEY
   rename: ALL_KEYS
   renamenx: ALL_KEYS
@@ -159,7 +160,7 @@ prefix_args = (args, key_pos, prefix) ->
   if key_pos is FIRST_KEY
     args[0] = generate_key(args[0], prefix)
   else if key_pos is LAST_KEY
-    args[args.length - 1] == generate_key(args[args.length - 1], prefix)
+    args[args.length - 1] = generate_key(args[args.length - 1], prefix)
   else if key_pos is ALL_KEYS or key_pos is NOT_FIRST_KEY or key_pos is NOT_LAST_KEY or key_pos is ODDS_KEY
     loop_start = 0
     loop_end = args.length
