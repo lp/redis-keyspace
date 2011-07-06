@@ -216,6 +216,13 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual(0)
         done()
       )
+  it 'should get the keys by pattern', () ->
+    runBlock 'keys*', (done) ->
+      client.keys('*', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['someKey'])
+        done()
+      )
 
 describe 'redis-keyspace prefix in complex sort', () ->
   client = null
