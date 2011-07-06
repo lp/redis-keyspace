@@ -39,7 +39,8 @@ NOT_FIRST_KEY = 2
 NOT_LAST_KEY = 3
 ALL_KEYS = 4
 ODDS_KEY = 5
-UNKNOWN_KEY = 6
+SORT_KEY = 6
+UNKNOWN_KEY = 7
 COMMANDS = 
   append: FIRST_KEY
   blpop: NOT_LAST_KEY
@@ -107,7 +108,7 @@ COMMANDS =
   sismember: FIRST_KEY
   smembers: FIRST_KEY
   smove: NOT_LAST_KEY
-  sort: FIRST_KEY
+  sort: SORT_KEY
   spop: FIRST_KEY
   srandmember: FIRST_KEY
   srem: FIRST_KEY
@@ -155,6 +156,16 @@ isEven = (num) ->
     true
   else
     false
+    
+parse_sort_keys = (args, prefix) ->
+  new_args = []
+  _.each(args, (arg, index) ->
+    if index is 0 or arg.substr(-1) is '*' or (index is args.length-1 and args[index-1] is 'STORE')
+      new_args.push generate_key(arg, prefix)
+    else
+      new_args.push arg
+  )
+  new_args
 
 prefix_args = (args, key_pos, prefix) ->
   if key_pos is FIRST_KEY
@@ -175,6 +186,8 @@ prefix_args = (args, key_pos, prefix) ->
       else if key_pos isnt ODDS_KEY
         args[i] = generate_key(args[i], prefix)
       i++
+  else if key_pos is SORT_KEY
+    args = parse_sort_keys(args, prefix)
   args
 
 class MultiKeyspace extends Multi
