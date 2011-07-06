@@ -23,6 +23,13 @@ p. With options:
 
 bc. client = redis_keyspace.createClient(6380, '192.168.168.100', {'prefix': 'your_keyspace'})
 
+h3. Incompatible Commands
+
+p. These commands are excluded from keyspace mangling:
+
+* KEYS
+* RANDOMKEY
+
 h3. Thanks
 
 p. This is a CoffeeScript spinoff of "node-redis-namespace":https://github.com/arschles/node-redis-namespace from "Aaron Schlesinger":https://github.com/arschles.
