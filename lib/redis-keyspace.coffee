@@ -149,12 +149,18 @@ generate_key = (key, prefix) ->
   else
     key
     
+isEven = (num) ->
+  if num % 2 is 0
+    true
+  else
+    false
+
 prefix_args = (args, key_pos, prefix) ->
   if key_pos is FIRST_KEY
     args[0] = generate_key(args[0], prefix)
   else if key_pos is LAST_KEY
     args[args.length - 1] == generate_key(args[args.length - 1], prefix)
-  else if key_pos is ALL_KEYS or key_pos is NOT_FIRST_KEY or key_pos is NOT_LAST_KEY
+  else if key_pos is ALL_KEYS or key_pos is NOT_FIRST_KEY or key_pos is NOT_LAST_KEY or key_pos is ODDS_KEY
     loop_start = 0
     loop_end = args.length
     if key_pos is NOT_FIRST_KEY
@@ -163,7 +169,10 @@ prefix_args = (args, key_pos, prefix) ->
       loop_end--
     i = loop_start
     while i < loop_end
-      args[i] = generate_key(args[i], prefix)
+      if key_pos is ODDS_KEY and isEven i
+        args[i] = generate_key(args[i], prefix)
+      else if key_pos isnt ODDS_KEY
+        args[i] = generate_key(args[i], prefix)
       i++
   args
 
