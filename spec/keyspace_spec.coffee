@@ -115,6 +115,18 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual(1)
         done()
       )
+    runBlock 'renamenx in keyspace A', (done) ->
+      client.renamenx('someKey', 'otherRenamedKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'renamednx exists in keyspace A', (done) ->
+      client.exists('otherRenamedKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
   it 'should get the type of a key', () ->
     runBlock 'type of key', (done) ->
       client.type('someKey', testAsync (error, reply) ->
