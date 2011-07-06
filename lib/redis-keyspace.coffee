@@ -151,6 +151,12 @@ generate_key = (key, prefix) ->
   else
     key
     
+remove_key = (key, prefix) ->
+  if prefix?
+    key.substr(prefix.length+1)
+  else
+    key
+    
 isEven = (num) ->
   if num % 2 is 0
     true
@@ -235,4 +241,16 @@ class RedisKeyspace extends RedisClient
   
   multi: (args) -> new MultiKeyspace(this, args)
   MULTI: (args) -> new MultiKeyspace(this, args)
+  return_reply: (reply) ->
+    command = null
+    @command_queue.forEach( (args, index) -> command = _.toArray(args)[0] if index is 0 )
+    if command.toLowerCase() is 'keys'
+      prefix = @options['prefix']
+      reply = _.map(reply, (item) ->
+        if item?
+          remove_key(item, prefix)
+        else
+          item
+      )
+    super(reply)
 
