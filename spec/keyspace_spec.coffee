@@ -223,6 +223,12 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual(['someKey'])
         done()
       )
+    runBlock 'keys someKey', (done) ->
+      client.keys('someKey', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['someKey'])
+        done()
+      )
 
 describe 'redis-keyspace prefix in complex sort', () ->
   client = null
@@ -309,6 +315,18 @@ describe 'redis-keyspace prefix for strings', () ->
       )
     runBlock 'get in keyspace B', (done) ->
       client2.get('newKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('otherValue')
+        done()
+      )
+    runBlock 'getset in keyspace A', (done) ->
+      client.getset('someKey', 'newValue', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('someValue')
+        done()
+      )
+    runBlock 'getset in keyspace B', (done) ->
+      client2.getset('someKey', 'newValue', testAsync (error, reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual('otherValue')
         done()
