@@ -83,6 +83,25 @@ describe 'redis-keyspace prefix for keys', () ->
     client.FLUSHDB testError
     client.quit()
     client2.quit()
+  it 'should delete keys is different keyspaces', () ->
+    runBlock 'exists in keyspace A', (done) ->
+      client.exists('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'del in keyspace A', (done) ->
+      client.del('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'do not exists in keyspace A', (done) ->
+      client.exists('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
   it 'should rename keys in different keyspaces', () ->
     runBlock 'rename in keyspace B', (done) ->
       client2.rename('someKey', 'renamedKey', testAsync (error, reply) ->
@@ -206,26 +225,6 @@ describe 'redis-keyspace prefix for strings', () ->
         done()
       )
   
-  it 'should delete keys is different keyspaces', () ->
-    runBlock 'exists in keyspace A', (done) ->
-      client.exists('someKey', testAsync (error, reply) ->
-        expect(error).toBeNull()
-        expect(reply).toEqual(1)
-        done()
-      )
-    runBlock 'del in keyspace A', (done) ->
-      client.del('someKey', testAsync (error, reply) ->
-        expect(error).toBeNull()
-        expect(reply).toEqual(1)
-        done()
-      )
-    runBlock 'do not exists in keyspace A', (done) ->
-      client.exists('someKey', testAsync (error, reply) ->
-        expect(error).toBeNull()
-        expect(reply).toEqual(0)
-        done()
-      )
-      
   it 'should setnx in different keyspaces', () ->
     runBlock 'setnx fails in keyspace B', (done) ->
       client2.setnx('someKey','newValue', testAsync (error, reply) ->
