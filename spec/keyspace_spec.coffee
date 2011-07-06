@@ -186,7 +186,54 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual(['valueB1', 'valueB2'])
         done()
       )
-    
+    runBlock 'incr in keyspace A', (done) ->
+      client.incr('count', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'incr in keyspace B', (done) ->
+      client2.incr('count', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'decr in keyspace A', (done) ->
+      client.decr('count', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'decr in keyspace B', (done) ->
+      client2.decr('count', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'incrby in keyspace A', (done) ->
+      client.incrby('count', 10, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(10)
+        done()
+      )
+    runBlock 'incrby in keyspace B', (done) ->
+      client2.incrby('count', 5, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(5)
+        done()
+      )
+    runBlock 'decrby in keyspace A', (done) ->
+      client.decrby('count', 3, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(7)
+        done()
+      )
+    runBlock 'decrby in keyspace B', (done) ->
+      client2.decrby('count', 2, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(3)
+        done()
+      )
 
 
 describe 'redis-keyspace test cleanup', () ->
