@@ -96,6 +96,44 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual(1)
         done()
       )
+  it 'should get the type of a key', () ->
+    runBlock 'type of key', (done) ->
+      client.type('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('string')
+        done()
+      )
+  it 'should manage keys expirations', () ->
+    runBlock 'expire key', (done) ->
+      client.expire('someKey', 10, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'ttl key', (done) ->
+      client.ttl('someKey', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(10)
+        done()
+      )
+    runBlock 'persist key', (done) ->
+      client.persist('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'expireat key', (done) ->
+      client.expireat('someKey', +new Date() + 20000, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'ttl key after expireat', (done) ->
+      client.ttl('someKey', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toBeGreaterThan(1000000000000)
+        done()
+      )
     
 describe 'redis-keyspace prefix for strings', () ->
   client = null
