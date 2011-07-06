@@ -201,7 +201,8 @@ class RedisKeyspace extends RedisClient
   constructor: (@port, @host, @options) ->
     for name, key_pos of COMMANDS
       do (name, key_pos) ->
-        cmd_func = (args...) ->
+        cmd_func = (_args...) ->
+          args = _.toArray(_args)
           func = null
           if typeof args[args.length-1] is 'function'
             func = args.pop()
@@ -210,9 +211,9 @@ class RedisKeyspace extends RedisClient
             
           args = prefix_args(args, key_pos, @options['prefix'])
           if func?
-            @send_command name, args..., func
+            @send_command name, args, func
           else
-            @send_command name, args...
+            @send_command name, args
         RedisKeyspace::[name] = cmd_func
         RedisKeyspace::[name.toUpperCase()] = cmd_func
     net_client = net.createConnection(port, host)
