@@ -20,7 +20,7 @@ testAsync = (test) ->
   (err, ret) ->
     test(err, ret)
 
-runBlock = (name='', func) ->
+runBlock = (name, func) ->
   complete = false
   completed = () -> complete
   done = () -> complete = true
@@ -28,6 +28,10 @@ runBlock = (name='', func) ->
     console.log "\n-> " + name
     func(done)
   waitsFor completed
+  
+xrunBlock = (name, func) ->
+  runs () ->
+    console.log "\nxSKIP< " + name + " >"
 
 describe 'redis-keyspace initialization', () ->
 
@@ -158,6 +162,31 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual('ew')
         done()
       )
+    runBlock 'mset in keyspace A', (done) ->
+      client.mset('key1', 'valueA1', 'key2', 'valueA2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('OK')
+        done()
+      )
+    runBlock 'mset in keyspace B', (done) ->
+      client2.mset('key1', 'valueB1', 'key2', 'valueB2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('OK')
+        done()
+      )
+    runBlock 'mget in keyspace A', (done) ->
+      client.mget('key1', 'key2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['valueA1', 'valueA2'])
+        done()
+      )
+    runBlock 'mget in keyspace B', (done) ->
+      client2.mget('key1', 'key2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['valueB1', 'valueB2'])
+        done()
+      )
+    
 
 
 describe 'redis-keyspace test cleanup', () ->
