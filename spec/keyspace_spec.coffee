@@ -150,16 +150,28 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual('newValuemore')
         done()
       )
+    runBlock 'setrange in keyspace A', (done) ->
+      client.setrange('newKey', 1, 'ZZZ', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(4)
+        done()
+      )
+    runBlock 'setrange in keyspace B', (done) ->
+      client2.setrange('newKey', 8, 'ZZZ', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(12)
+        done()
+      )
     runBlock 'getrange from keyspace A', (done) ->
       client.getrange('newKey', 0, 1, testAsync (error, reply) ->
         expect(error).toBeNull()
-        expect(reply).toEqual('mo')
+        expect(reply).toEqual('mZ')
         done()
       )
     runBlock 'getrange from keyspace B', (done) ->
-      client2.getrange('newKey', 1, 2, testAsync (error, reply) ->
+      client2.getrange('newKey', 7, 9, testAsync (error, reply) ->
         expect(error).toBeNull()
-        expect(reply).toEqual('ew')
+        expect(reply).toEqual('eZZ')
         done()
       )
     runBlock 'mset in keyspace A', (done) ->
