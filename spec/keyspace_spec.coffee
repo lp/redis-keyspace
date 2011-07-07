@@ -414,6 +414,43 @@ describe 'redis-keyspace prefix for strings', () ->
         expect(error).toBeNull()
         expect(reply).toEqual(['valueB1', 'valueB2'])
         done()
+      )    
+  it 'should msetnx in different keyspaces', () ->
+    runBlock 'msetnx fail in keyspace A', (done) ->
+      client.msetnx('key1', 'valueA1', 'key2', 'valueA2', 'someKey', 'someValue', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'msetnx fail in keyspace A', (done) ->
+      client.msetnx('key1', 'valueA1', 'key2', 'valueA2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'msetnx fail in keyspace B', (done) ->
+      client2.msetnx('key1', 'valueA1', 'key2', 'valueA2', 'someKey', 'someValue', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'msetnx fail in keyspace B', (done) ->
+      client2.msetnx('key1', 'valueA1', 'key2', 'valueA2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'mget to confirm msetnx in keyspace A', (done) ->
+      client.mget('key1', 'key2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['valueA1', 'valueA2'])
+        done()
+      )
+    runBlock 'mget to confirm msetnx in keyspace B', (done) ->
+      client2.mget('key1', 'key2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['valueA1', 'valueA2'])
+        done()
       )
   it 'should incr and decr in different keyspaces', () ->
     runBlock 'incr in keyspace A', (done) ->
