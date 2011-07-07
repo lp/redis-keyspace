@@ -38,3 +38,10 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(4)
         done()
       )
+  it 'should get the number of members within a score range with zcount', () ->
+    runBlock 'zcount', (done) ->
+      client.zcount('myzset', 2, 4, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(3)
+        done()
+      )
