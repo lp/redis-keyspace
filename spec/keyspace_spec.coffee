@@ -501,7 +501,7 @@ describe 'redis-keyspace prefix for strings', () ->
         expect(reply).toEqual(3)
         done()
       )
-  it 'should get strlen', (done) ->
+  it 'should get strlen', () ->
     runBlock 'strlen in keyspace A', (done) ->
       client.strlen('someKey', testAsync (error, reply) ->
         expect(error).toBeNull()
@@ -514,7 +514,31 @@ describe 'redis-keyspace prefix for strings', () ->
         expect(reply).toEqual(10)
         done()
       )
-
+  it 'should setbit and getbit', () ->
+    runBlock 'setbit in keyspace A', (done) ->
+      client.setbit('bitkey', 0, 1, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'setbit in keyspace B', (done) ->
+      client2.setbit('bitkey', 0, 0, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+    runBlock 'getbit in keyspace A', (done) ->
+      client.getbit('bitkey', 0, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'getbit in keyspace B', (done) ->
+      client2.getbit('bitkey', 0, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
 
 describe 'redis-keyspace test cleanup', () ->
   client = null
