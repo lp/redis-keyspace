@@ -52,3 +52,10 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual('3')
         done()
       )
+  it 'should determine the index of a member with zrank', () ->
+    runBlock 'zrank', (done) ->
+      client.zrank('myzset', 'three', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(2)
+        done()
+      )
