@@ -25,9 +25,7 @@ bc. client = redis_keyspace.createClient(6380, '192.168.168.100', {'prefix': 'yo
 
 h3. Incompatible Commands
 
-p. These commands are excluded from keyspace mangling:
-
-* RANDOMKEY
+<!-- p. These commands are excluded from keyspace mangling: -->
 
 h3. Thanks
 
