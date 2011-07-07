@@ -66,3 +66,29 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(1)
         done()
       )
+  it 'should return members within a score range with zrange', () ->
+    runBlock 'zrange', (done) ->
+      client.zrange('myzset', 1, 3, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['two','three','four'])
+        done()
+      )
+    runBlock 'zrange WITHSCORES', (done) ->
+      client.zrange('myzset', 1, 3, 'WITHSCORES', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['two','2','three','3','four','4'])
+        done()
+      )
+  it 'should return members within a  reversedscore range with zrevrange', () ->
+    runBlock 'zrevrange', (done) ->
+      client.zrevrange('myzset', 1, 3, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['three','two', 'one'])
+        done()
+      )
+    runBlock 'zrevrange WITHSCORES', (done) ->
+      client.zrevrange('myzset', 1, 3, 'WITHSCORES', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['three','3','two','2','one','1'])
+        done()
+      )
