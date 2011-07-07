@@ -253,4 +253,10 @@ class RedisKeyspace extends RedisClient
           item
       )
     super(reply)
+  randomkey: (func) ->
+    @keys('*', (error, reply) ->
+      if reply?
+        reply = reply[Math.floor(Math.random()*reply.length)]
+      func(error,reply)
+    )
 
