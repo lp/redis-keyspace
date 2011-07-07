@@ -501,6 +501,19 @@ describe 'redis-keyspace prefix for strings', () ->
         expect(reply).toEqual(3)
         done()
       )
+  it 'should get strlen', (done) ->
+    runBlock 'strlen in keyspace A', (done) ->
+      client.strlen('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(9)
+        done()
+      )
+    runBlock 'strlen in keyspace B', (done) ->
+      client2.strlen('someKey', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(10)
+        done()
+      )
 
 
 describe 'redis-keyspace test cleanup', () ->
