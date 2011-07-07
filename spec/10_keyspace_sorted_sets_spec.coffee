@@ -45,3 +45,10 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(3)
         done()
       )
+  it 'should get the score associated with a given member with zscore', () ->
+    runBlock 'zscore', (done) ->
+      client.zscore('myzset', 'three', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('3')
+        done()
+      )
