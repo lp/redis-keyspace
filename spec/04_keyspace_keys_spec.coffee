@@ -1,4 +1,5 @@
 require('./helpers')
+_ = require('underscore')
 
 describe 'redis-keyspace prefix for keys', () ->
   client = null
@@ -158,3 +159,16 @@ describe 'redis-keyspace prefix for keys', () ->
         expect(reply).toEqual(['someKey'])
         done()
       )
+  it 'should get randomkey inside keyspace', () ->
+    client.rename('someKey', 'r1', testError)
+    client.set('r2', 'v2', testError)
+    client.set('r3', 'v3', testError)
+    client.set('r4', 'v4', testError)
+    client.set('r5', 'v5', testError)
+    runBlock 'randomkey', (done) ->
+      client.randomkey(testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(_.include(['r1','r2','r3','r4','r5'], reply)).toBeTruthy()
+        done()
+      )
+    
