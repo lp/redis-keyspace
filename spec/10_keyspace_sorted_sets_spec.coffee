@@ -59,3 +59,10 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(2)
         done()
       )
+  it 'should determine the reversed index of a member with zrevrank', () ->
+    runBlock 'zrank', (done) ->
+      client.zrevrank('myzset', 'three', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
