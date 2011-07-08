@@ -49,3 +49,16 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual('value2')
         done()
       )
+  it 'should delete a key in hash with hdel', () ->
+    runBlock 'hdel', (done) ->
+      client.hdel('testhash', 'key3', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'hlen to confirm hdel', (done) ->
+      client.hlen('testhash', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(2)
+        done()
+      )
