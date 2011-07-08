@@ -76,3 +76,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual({key1:'value1',key2:'value2',key3:'value3'})
         done()
       )
+  it 'should return all keys with hkeys', () ->
+    runBlock 'hkeys', (done) ->
+      client.hkeys('testhash', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['key1','key2','key3'])
+        done()
+      )
