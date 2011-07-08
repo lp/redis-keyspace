@@ -125,9 +125,23 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(1)
         done()
       )
-    runBlock 'zscore', (done) ->
+    runBlock 'zscore to confirm zrem', (done) ->
       client.zscore('myzset', 'one', testAsync (error, reply) ->
         expect(error).toBeNull()
         expect(reply).toBeNull()
         done()
       )
+  it 'should remove a range by rank with zremrangebyrank', () ->
+    runBlock 'zremrangebyrank', (done) ->
+      client.zremrangebyrank('myzset', 1, 3, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(3)
+        done()
+      )
+    runBlock 'zcard to confirm zremrangebyrank', (done) ->
+      client.zcard('myzset', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+      
