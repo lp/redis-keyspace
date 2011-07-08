@@ -89,3 +89,17 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.intersect(reply,['five','six']).length).toEqual(2)
         done()
       )
+  it 'should diff sets and store results with sdiffstore', () ->
+    runBlock 'sdiffstore', (done) ->
+      client2.sdiffstore('newset','myset','myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(2)
+        done()
+      )
+    runBlock 'smembers to confirm sdiffstore', (done) ->
+      client2.smembers('newset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply.length).toEqual(2)
+        expect(_.intersect(reply,['five','six']).length).toEqual(2)
+        done()
+      )
