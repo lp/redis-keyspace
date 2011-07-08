@@ -83,3 +83,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(['key1','key2','key3'])
         done()
       )
+  it 'should return all values with hvals', () ->
+    runBlock 'hvals', (done) ->
+      client.hvals('testhash', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['value1','value2','value3'])
+        done()
+      )
