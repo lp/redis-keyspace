@@ -110,3 +110,16 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(reply).toEqual(['seven'])
         done()
       )
+  it 'should intersect sets and store results with sinterstore', () ->
+    runBlock 'sinterstore', (done) ->
+      client2.sinterstore('newset','myset','myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'smembers to confirm sinterstore', (done) ->
+      client2.smembers('newset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['seven'])
+        done()
+      )
