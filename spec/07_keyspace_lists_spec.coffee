@@ -108,3 +108,17 @@ describe 'redis-keyspace prefix for lists', () ->
         expect(reply).toEqual(5)
         done()
       )
+  it 'should set a member value by index with lset', () ->
+    runBlock 'lset', (done) ->
+      client.lset('testlist', 1, 'newval', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('OK')
+        done()
+      )
+    runBlock 'lindex to confirm lset', (done) ->
+      client.lindex('testlist', 1, testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('newval')
+        done()
+      )
+  
