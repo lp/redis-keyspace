@@ -27,3 +27,16 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(reply).toEqual(4)
         done()
       )
+  it 'should know if a member is present with sismember', () ->
+    runBlock 'sismember succeed', (done) ->
+      client.sismember('myset','one',testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'sismember fails', (done) ->
+      client.sismember('myset','five',testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
