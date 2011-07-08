@@ -69,3 +69,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(1)
         done()
       )
+  it 'should return all key and values with hgetall', () ->
+    runBlock 'hgetall', (done) ->
+      client.hgetall('testhash', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual({key1:'value1',key2:'value2',key3:'value3'})
+        done()
+      )
