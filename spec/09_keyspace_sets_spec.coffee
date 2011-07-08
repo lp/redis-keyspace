@@ -81,3 +81,11 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.intersect(reply,['one','three','four']).length).toEqual(3)
         done()
       )
+  it 'should diff sets with sdiff', () ->
+    runBlock 'sdiff', (done) ->
+      client2.sdiff('myset','myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply.length).toEqual(2)
+        expect(_.intersect(reply,['five','six']).length).toEqual(2)
+        done()
+      )
