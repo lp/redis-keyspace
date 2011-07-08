@@ -97,3 +97,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(10)
         done()
       )
+  it 'should get multiple fields with hmget', () ->
+    runBlock 'hmget', (done) ->
+      client.hmget('testhash', 'key2', 'key3', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['value2','value3'])
+        done()
+      )
