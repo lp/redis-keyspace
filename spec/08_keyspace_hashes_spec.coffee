@@ -12,10 +12,10 @@ describe 'redis-keyspace prefix for hashes', () ->
       key3: 'value3'
     }, testError)
     client2.hmset('testhash', {
-      key4: 'value4',
-      key5: 'value5',
-      key6: 'value6',
-      key7: 'value7'
+      key4: 4,
+      key5: 5,
+      key6: 6,
+      key7: 7
     }, testError)
   afterEach () ->
     client.FLUSHDB testError
@@ -88,5 +88,12 @@ describe 'redis-keyspace prefix for hashes', () ->
       client.hvals('testhash', testAsync (error, reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual(['value1','value2','value3'])
+        done()
+      )
+  it 'should increment field value with hincrby', () ->
+    runBlock 'hincrby', (done) ->
+      client2.hincrby('testhash', 'key5', 5, testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(10)
         done()
       )
