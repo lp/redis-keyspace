@@ -15,7 +15,7 @@ describe 'redis-keyspace prefix for sets', () ->
     client2.sadd('myset', 'six', testError)
     client2.sadd('myset', 'seven', testError)
     client2.sadd('myset2', 'seven', testError)
-    client2.sadd('myset2', 'height', testError)
+    client2.sadd('myset2', 'eight', testError)
   afterEach () ->
     client.FLUSHDB testError
     client.quit()
@@ -121,5 +121,26 @@ describe 'redis-keyspace prefix for sets', () ->
       client2.smembers('newset', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual(['seven'])
+        done()
+      )
+  it 'should move member from sets with smove', () ->
+    runBlock 'smove', (done) ->
+      client2.smove('myset', 'myset2', 'six', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'smembers to confirm smove source', (done) ->
+      client2.smembers('myset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply.length).toEqual(2)
+        expect(_.intersect(reply,['five','seven']).length).toEqual(2)
+        done()
+      )
+    runBlock 'smembers to confirm smove destination', (done) ->
+      client2.smembers('myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply.length).toEqual(3)
+        expect(_.intersect(reply,['six','seven','eight']).length).toEqual(3)
         done()
       )
