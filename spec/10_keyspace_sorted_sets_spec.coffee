@@ -118,3 +118,16 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(['three','3','two','2','one','1'])
         done()
       )
+  it 'should remove a member with zrem', () ->
+    runBlock 'zrem', (done) ->
+      client.zrem('myzset','one', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'zscore', (done) ->
+      client.zscore('myzset', 'one', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toBeNull()
+        done()
+      )
