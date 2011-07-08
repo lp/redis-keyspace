@@ -40,7 +40,8 @@ NOT_LAST_KEY = 3
 ALL_KEYS = 4
 ODDS_KEY = 5
 SORT_KEY = 6
-UNKNOWN_KEY = 7
+STORE_KEY = 7
+UNKNOWN_KEY = 8
 COMMANDS = 
   append: FIRST_KEY
   blpop: NOT_LAST_KEY
@@ -122,7 +123,7 @@ COMMANDS =
   zcard: FIRST_KEY
   zcount: FIRST_KEY
   zincrby: FIRST_KEY
-  zinterstore: UNKNOWN_KEY
+  zinterstore: STORE_KEY
   zrange: FIRST_KEY
   zrangebyscore: FIRST_KEY
   zrank: FIRST_KEY
@@ -133,7 +134,7 @@ COMMANDS =
   zrevrangebyscore: FIRST_KEY
   zrevrank: FIRST_KEY
   zscore: FIRST_KEY
-  zunionstore: UNKNOWN_KEY
+  zunionstore: STORE_KEY
 
 parse_hmset_args = (args) ->
   if args.length >= 2 and typeof args[0] is 'string' and typeof args[1] is 'object'
@@ -173,6 +174,16 @@ parse_sort_keys = (args, prefix) ->
   )
   new_args
 
+parse_store_keys = (args, prefix) ->
+  num_keys = null
+  _.map(args, (arg, index) ->
+    if index is 1
+      num_keys = arg
+    else if (num_keys? and index > 1 and index <= num_keys+1) or index is 0
+      arg = generate_key(arg,prefix)
+    arg
+  )
+
 prefix_args = (args, key_pos, prefix) ->
   if key_pos is FIRST_KEY
     args[0] = generate_key(args[0], prefix)
@@ -194,6 +205,8 @@ prefix_args = (args, key_pos, prefix) ->
       i++
   else if key_pos is SORT_KEY
     args = parse_sort_keys(args, prefix)
+  else if key_pos is STORE_KEY
+    args = parse_store_keys(args, prefix)
   args
 
 class MultiKeyspace extends Multi
