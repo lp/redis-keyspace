@@ -169,4 +169,11 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(3)
         done()
       )
+  it 'should increase the score with zincrby', () ->
+    runBlock 'zincrby', (done) ->
+      client.zincrby('myzset', 5, 'one', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('6')
+        done()
+      )
       
