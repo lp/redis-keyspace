@@ -67,3 +67,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual('val3')
         done()
       )
+  it 'should get a range of members with lrange', () ->
+    runBlock 'lrange', (done) ->
+      client.lrange('testlist',1,10, testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['val2','val3'])
+        done()
+      )
