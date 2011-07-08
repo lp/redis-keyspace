@@ -144,3 +144,11 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.intersect(reply,['six','seven','eight']).length).toEqual(3)
         done()
       )
+  it 'should union sets with sunion', () ->
+    runBlock 'sunion', (done) ->
+      client2.sunion('myset', 'myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply.length).toEqual(4)
+        expect(_.intersect(reply,['five','six','seven','eight']).length).toEqual(4)
+        done()
+      )
