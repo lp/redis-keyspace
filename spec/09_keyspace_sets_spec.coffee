@@ -68,3 +68,16 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.include(['one','two','three','four'],reply)).toBeTruthy()
         done()
       )
+  it 'should remove a member with srem', () ->
+    runBlock 'srem', (done) ->
+      client.srem('myset','two', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'smembers to confirm srem', (done) ->
+      client.smembers('myset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(_.intersect(reply,['one','three','four']).length).toEqual(3)
+        done()
+      )
