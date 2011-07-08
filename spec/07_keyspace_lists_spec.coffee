@@ -25,3 +25,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(3)
         done()
       )
+  it 'should remove from a list with lrem', () ->
+    runBlock 'lrem', (done) ->
+      client.lrem('testlist', 0, 'val2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
