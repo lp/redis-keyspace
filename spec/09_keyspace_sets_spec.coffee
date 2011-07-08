@@ -48,3 +48,16 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.intersect(reply,['one','two','three','four']).length).toEqual(4)
         done()
       )
+  it 'should return an remove a random member with spop', () ->
+    runBlock 'spop', (done) ->
+      client.spop('myset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(_.include(['one','two','three','four'],reply)).toBeTruthy()
+        done()
+      )
+    runBlock 'scard to confirm spop', (done) ->
+      client.scard('myset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(3)
+        done()
+      )
