@@ -2,7 +2,7 @@
 	"name" : "redis-keyspace",
 	"description" : "redis namespacing for node",
 	"keywords" : ["redis", "key-value stores", "namespacing"],
-	"version" : "0.4.8",
+	"version" : "0.4.9",
 	"contributors": [
 		{
 			"name": "Louis-Philippe Perron",
