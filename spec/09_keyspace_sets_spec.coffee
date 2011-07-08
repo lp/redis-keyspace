@@ -103,3 +103,10 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.intersect(reply,['five','six']).length).toEqual(2)
         done()
       )
+  it 'should intersect sets with sinter', () ->
+    runBlock 'sinter', (done) ->
+      client2.sinter('myset','myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['seven'])
+        done()
+      )
