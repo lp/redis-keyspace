@@ -152,3 +152,17 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(_.intersect(reply,['five','six','seven','eight']).length).toEqual(4)
         done()
       )
+  it 'should union sets and store results with sunionstore', () ->
+    runBlock 'sunionstore', (done) ->
+      client2.sunionstore('newset','myset','myset2', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(4)
+        done()
+      )
+    runBlock 'smembers to confirm sunionstore', (done) ->
+      client2.smembers('newset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply.length).toEqual(4)
+        expect(_.intersect(reply,['five','six','seven','eight']).length).toEqual(4)
+        done()
+      )
