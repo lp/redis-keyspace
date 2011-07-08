@@ -61,3 +61,10 @@ describe 'redis-keyspace prefix for sets', () ->
         expect(reply).toEqual(3)
         done()
       )
+  it 'should return a random member with srandmember', () ->
+    runBlock 'srandmember', (done) ->
+      client.srandmember('myset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(_.include(['one','two','three','four'],reply)).toBeTruthy()
+        done()
+      )
