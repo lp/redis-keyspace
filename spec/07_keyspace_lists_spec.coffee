@@ -46,3 +46,17 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(5)
         done()
       )
+  it 'should add an member to a list only if a list exist with lpushx', () ->
+    runBlock 'lpushx', (done) ->
+      client2.lpushx('newlist', 'val0', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
+  it 'should add an member to a list only if a list exist with rpushx', () ->
+    runBlock 'rpushx', (done) ->
+      client2.rpushx('testlist', 'val8', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(5)
+        done()
+      )
