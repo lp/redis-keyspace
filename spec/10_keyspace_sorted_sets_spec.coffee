@@ -13,6 +13,8 @@ describe 'redis-keyspace prefix for sorted sets', () ->
     client2.zadd('myzset', 5, 'five', testError)
     client2.zadd('myzset', 6, 'six', testError)
     client2.zadd('myzset', 7, 'seven', testError)
+    client2.zadd('myzset2', 14, 'seven', testError)
+    client2.zadd('myzset2', 8, 'height', testError)
   afterEach () ->
     client.FLUSHDB testError
     client.quit()
@@ -174,6 +176,32 @@ describe 'redis-keyspace prefix for sorted sets', () ->
       client.zincrby('myzset', 5, 'one', testAsync (error, reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual('6')
+        done()
+      )
+  it 'should store result of union with zunionstore', () ->
+    runBlock 'zunionstore', (done) ->
+      client2.zunionstore('storeset', 2, 'myzset', 'myzset2', 'WEIGHTS', 2, 1, 'AGGREGATE', 'SUM', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(4)
+        done()
+      )
+    runBlock 'zscore to confirm zunionstore', (done) ->
+      client2.zscore('storeset', 'seven', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('28')
+        done()
+      )
+  it 'should store result of intersection with zinterstore', () ->
+    runBlock 'zinterstore', (done) ->
+      client2.zinterstore('storeset', 2, 'myzset', 'myzset2', 'WEIGHTS', 3, 2, 'AGGREGATE', 'SUM', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'zscore to confirm zinterstore', (done) ->
+      client2.zscore('storeset', 'seven', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('49')
         done()
       )
       
