@@ -88,3 +88,16 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual('val3')
         done()
       )
+  it 'should pop the last member and push to an other list with rpoplpush', () ->
+    runBlock 'rpoplpush', (done) ->
+      client.rpoplpush('testlist','newlist', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('val3')
+        done()
+      )
+    runBlock 'llen to confirm rpoplpush', (done) ->
+      client.llen('newlist', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
