@@ -104,3 +104,16 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(['value2','value3'])
         done()
       )
+  it 'should set the value only if absent with hsetnx', () ->
+    runBlock 'hsetnx succeed', (done) ->
+      client.hsetnx('testhash', 'key7', 'newvalue', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'hsetnx fails', (done) ->
+      client2.hsetnx('testhash', 'key7', 'newvalue', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(0)
+        done()
+      )
