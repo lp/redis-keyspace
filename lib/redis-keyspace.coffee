@@ -136,16 +136,6 @@ COMMANDS =
   zscore: FIRST_KEY
   zunionstore: STORE_KEY
 
-parse_hmset_args = (args) ->
-  if args.length >= 2 and typeof args[0] is 'string' and typeof args[1] is 'object'
-    tmp_args = [args[0]]
-    _.each( _.keys(args[1]), (key) ->
-      tmp_args.push(key)
-      tmp_args.push(args[1][key]))
-    tmp_args
-  else
-    args
-    
 generate_key = (key, prefix) ->
   if prefix?
     prefix + ":" + key
@@ -209,6 +199,16 @@ prefix_args = (args, key_pos, prefix) ->
     args = parse_store_keys(args, prefix)
   args
 
+parse_hmset_args = (args) ->
+  if args.length >= 2 and typeof args[0] is 'string' and typeof args[1] is 'object'
+    tmp_args = [args[0]]
+    _.each( _.keys(args[1]), (key) ->
+      tmp_args.push(key)
+      tmp_args.push(args[1][key]))
+    tmp_args
+  else
+    args
+
 class MultiKeyspace extends Multi
   constructor: (client,args) ->
     if client.options['prefix']?
@@ -236,12 +236,20 @@ class RedisKeyspace extends RedisClient
       do (name, key_pos) ->
         cmd_func = (_args...) ->
           args = _.toArray(_args)
+          
+          if _.isArray args[0]
+            ob = args.shift()
+            args = ob.concat(args)
+          
           func = null
           if typeof args[args.length-1] is 'function'
             func = args.pop()
+          
           if name is 'hmset'
             args = parse_hmset_args(args)
-            
+          else if name is 'hmget'
+            args = _.flatten(args)
+          
           args = prefix_args(args, key_pos, @options['prefix'])
           if func?
             @send_command name, args, func
@@ -257,7 +265,7 @@ class RedisKeyspace extends RedisClient
   return_reply: (reply) ->
     command = null
     @command_queue.forEach( (args, index) -> command = _.toArray(args)[0] if index is 0 )
-    if command.toLowerCase() is 'keys'
+    if command? and command.toLowerCase() is 'keys'
       prefix = @options['prefix']
       reply = _.map(reply, (item) ->
         if item?
