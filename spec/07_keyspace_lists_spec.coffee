@@ -74,3 +74,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(['val2','val3'])
         done()
       )
+  it 'should pop the first member with lpop', () ->
+    runBlock 'lpop', (done) ->
+      client.lpop('testlist', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('val1')
+        done()
+      )
