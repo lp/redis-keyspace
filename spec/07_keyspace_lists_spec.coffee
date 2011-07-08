@@ -121,4 +121,17 @@ describe 'redis-keyspace prefix for lists', () ->
         expect(reply).toEqual('newval')
         done()
       )
+  it 'should trim list with ltrim', () ->
+    runBlock 'ltrim', (done) ->
+      client2.ltrim('testlist',1,2, testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('OK')
+        done()
+      )
+    runBlock 'llen to confirm ltrim', (done) ->
+      client2.llen('testlist', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(2)
+        done()
+      )
   
