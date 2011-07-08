@@ -29,3 +29,23 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(3)
         done()
       )
+  it 'should set key in hash with hset', () ->
+    runBlock 'hset', (done) ->
+      client2.hset('testhash', 'keymore', 'valuemore', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
+    runBlock 'hlen to confirm hset', (done) ->
+      client2.hlen('testhash', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(5)
+        done()
+      )
+  it 'should get key in hash with hget', () ->
+    runBlock 'hget', (done) ->
+      client.hget('testhash', 'key2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('value2')
+        done()
+      )
