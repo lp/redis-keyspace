@@ -66,7 +66,7 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(1)
         done()
       )
-  it 'should return members within a score range with zrange', () ->
+  it 'should return members within an index range with zrange', () ->
     runBlock 'zrange', (done) ->
       client.zrange('myzset', 1, 3, testAsync (error, reply) ->
         expect(error).toBeNull()
@@ -79,7 +79,7 @@ describe 'redis-keyspace prefix for sorted sets', () ->
         expect(reply).toEqual(['two','2','three','3','four','4'])
         done()
       )
-  it 'should return members within a  reversedscore range with zrevrange', () ->
+  it 'should return members within a reversed index range with zrevrange', () ->
     runBlock 'zrevrange', (done) ->
       client.zrevrange('myzset', 1, 3, testAsync (error, reply) ->
         expect(error).toBeNull()
@@ -88,6 +88,32 @@ describe 'redis-keyspace prefix for sorted sets', () ->
       )
     runBlock 'zrevrange WITHSCORES', (done) ->
       client.zrevrange('myzset', 1, 3, 'WITHSCORES', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['three','3','two','2','one','1'])
+        done()
+      )
+  it 'should return members within a score range with zrangebyscore', () ->
+    runBlock 'zrangebyscore', (done) ->
+      client.zrangebyscore('myzset', 2, 4, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['two','three','four'])
+        done()
+      )
+    runBlock 'zrangebyscore WITHSCORES', (done) ->
+      client.zrangebyscore('myzset', 2, 4, 'WITHSCORES', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['two','2','three','3','four','4'])
+        done()
+      )
+  it 'should return members within a reversed score range with zrevrangebyscore', () ->
+    runBlock 'zrevrangebyscore', (done) ->
+      client.zrevrangebyscore('myzset', 3, 1, testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(['three','two', 'one'])
+        done()
+      )
+    runBlock 'zrevrangebyscore WITHSCORES', (done) ->
+      client.zrevrangebyscore('myzset', 3, 1, 'WITHSCORES', testAsync (error, reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual(['three','3','two','2','one','1'])
         done()
