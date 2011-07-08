@@ -81,3 +81,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual('val1')
         done()
       )
+  it 'should pop the last member with rpop', () ->
+    runBlock 'rpop', (done) ->
+      client.rpop('testlist', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('val3')
+        done()
+      )
