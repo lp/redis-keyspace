@@ -62,3 +62,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(2)
         done()
       )
+  it 'should tell if a key exist with hexists', () ->
+    runBlock 'hexists', (done) ->
+      client.hexists('testhash', 'key2', testAsync (error, reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(1)
+        done()
+      )
