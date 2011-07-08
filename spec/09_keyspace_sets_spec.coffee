@@ -1,4 +1,5 @@
 require('./helpers')
+_ = require('underscore')
 
 describe 'redis-keyspace prefix for sets', () ->
   client = null
@@ -38,5 +39,12 @@ describe 'redis-keyspace prefix for sets', () ->
       client.sismember('myset','five',testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual(0)
+        done()
+      )
+  it 'should return all members with smembers', () ->
+    runBlock 'smembers', (done) ->
+      client.smembers('myset', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(_.intersect(reply,['one','two','three','four']).length).toEqual(4)
         done()
       )
