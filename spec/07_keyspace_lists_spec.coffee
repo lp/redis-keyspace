@@ -60,3 +60,10 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(5)
         done()
       )
+  it 'should get a member by its index with lindex', () ->
+    runBlock 'lindex', (done) ->
+      client.lindex('testlist',2, testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual('val3')
+        done()
+      )
