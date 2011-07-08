@@ -32,3 +32,17 @@ describe 'redis-keyspace prefix for hashes', () ->
         expect(reply).toEqual(1)
         done()
       )
+  it 'should add an member to a list with lpush', () ->
+    runBlock 'lpush', (done) ->
+      client2.lpush('testlist', 'val3', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(5)
+        done()
+      )
+  it 'should add an member to a list with rpush', () ->
+    runBlock 'rpush', (done) ->
+      client2.rpush('testlist', 'val8', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(5)
+        done()
+      )
