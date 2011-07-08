@@ -1,6 +1,6 @@
 require('./helpers')
 
-describe 'redis-keyspace prefix for hashes', () ->
+describe 'redis-keyspace prefix for lists', () ->
   client = null
   client2 = null
   beforeEach () ->
@@ -99,5 +99,12 @@ describe 'redis-keyspace prefix for hashes', () ->
       client.llen('newlist', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual(1)
+        done()
+      )
+  it 'should insert a member with linsert', () ->
+    runBlock 'linsert', (done) ->
+      client2.linsert('testlist', 'BEFORE', 'val6', 'val5dot5', testAsync (error,reply) ->
+        expect(error).toBeNull()
+        expect(reply).toEqual(5)
         done()
       )
