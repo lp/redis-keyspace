@@ -7,7 +7,7 @@ if (process.versions.node.match(/^0.3/)) {
     var util = require("util");
 } else {
     // This module is called "sys" in 0.2.x
-    var util = require("sys");
+    var util = require('util');
 }
 
 var redis = require("./index"),
