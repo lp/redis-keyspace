@@ -45,7 +45,7 @@ describe 'redis-keyspace prefix for sets', () ->
     runBlock 'smembers', (done) ->
       client.smembers('myset', testAsync (error,reply) ->
         expect(error).toBeNull()
-        expect(_.intersect(reply,['one','two','three','four']).length).toEqual(4)
+        expect(_.intersection(reply,['one','two','three','four']).length).toEqual(4)
         done()
       )
   it 'should return an remove a random member with spop', () ->
@@ -78,7 +78,7 @@ describe 'redis-keyspace prefix for sets', () ->
     runBlock 'smembers to confirm srem', (done) ->
       client.smembers('myset', testAsync (error,reply) ->
         expect(error).toBeNull()
-        expect(_.intersect(reply,['one','three','four']).length).toEqual(3)
+        expect(_.intersection(reply,['one','three','four']).length).toEqual(3)
         done()
       )
   it 'should diff sets with sdiff', () ->
@@ -86,7 +86,7 @@ describe 'redis-keyspace prefix for sets', () ->
       client2.sdiff('myset','myset2', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply.length).toEqual(2)
-        expect(_.intersect(reply,['five','six']).length).toEqual(2)
+        expect(_.intersection(reply,['five','six']).length).toEqual(2)
         done()
       )
   it 'should diff sets and store results with sdiffstore', () ->
@@ -100,17 +100,17 @@ describe 'redis-keyspace prefix for sets', () ->
       client2.smembers('newset', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply.length).toEqual(2)
-        expect(_.intersect(reply,['five','six']).length).toEqual(2)
+        expect(_.intersection(reply,['five','six']).length).toEqual(2)
         done()
       )
-  it 'should intersect sets with sinter', () ->
+  it 'should intersection sets with sinter', () ->
     runBlock 'sinter', (done) ->
       client2.sinter('myset','myset2', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply).toEqual(['seven'])
         done()
       )
-  it 'should intersect sets and store results with sinterstore', () ->
+  it 'should intersection sets and store results with sinterstore', () ->
     runBlock 'sinterstore', (done) ->
       client2.sinterstore('newset','myset','myset2', testAsync (error,reply) ->
         expect(error).toBeNull()
@@ -134,14 +134,14 @@ describe 'redis-keyspace prefix for sets', () ->
       client2.smembers('myset', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply.length).toEqual(2)
-        expect(_.intersect(reply,['five','seven']).length).toEqual(2)
+        expect(_.intersection(reply,['five','seven']).length).toEqual(2)
         done()
       )
     runBlock 'smembers to confirm smove destination', (done) ->
       client2.smembers('myset2', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply.length).toEqual(3)
-        expect(_.intersect(reply,['six','seven','eight']).length).toEqual(3)
+        expect(_.intersection(reply,['six','seven','eight']).length).toEqual(3)
         done()
       )
   it 'should union sets with sunion', () ->
@@ -149,7 +149,7 @@ describe 'redis-keyspace prefix for sets', () ->
       client2.sunion('myset', 'myset2', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply.length).toEqual(4)
-        expect(_.intersect(reply,['five','six','seven','eight']).length).toEqual(4)
+        expect(_.intersection(reply,['five','six','seven','eight']).length).toEqual(4)
         done()
       )
   it 'should union sets and store results with sunionstore', () ->
@@ -163,6 +163,6 @@ describe 'redis-keyspace prefix for sets', () ->
       client2.smembers('newset', testAsync (error,reply) ->
         expect(error).toBeNull()
         expect(reply.length).toEqual(4)
-        expect(_.intersect(reply,['five','six','seven','eight']).length).toEqual(4)
+        expect(_.intersection(reply,['five','six','seven','eight']).length).toEqual(4)
         done()
       )
